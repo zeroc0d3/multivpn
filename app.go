@@ -54,7 +54,7 @@ func main() {
 
 	// create the logger
 	logger := logrus.New()
-	logger.Formatter = &logrus.JSONFormatter{}
+	// logger.Formatter = &logrus.JSONFormatter{}   # --> format to JSON
 
 	fName, err := os.OpenFile(MULTIVPN_LOG, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0755)
 	if err != nil {
