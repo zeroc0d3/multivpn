@@ -19,8 +19,8 @@ vpn-install:
 
 vpn-setup:
 	@sudo mkdir -p /var/log/multivpn
-	@sudo chmod 777 /var/log/multivpn
 	@sudo touch /var/log/multivpn/multivpn.log
+	@sudo chmod -R 777 /var/log/multivpn
 
 vpn-run:
 	@.${PATH_FOLDER}/bin/multivpn default
