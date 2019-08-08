@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"runtime"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/dimiro1/banner"
@@ -15,8 +16,10 @@ import (
 
 const MULTIVPN_LOG = "/var/log/multivpn/multivpn.log"
 
-var loadKey string = "ABC.ovpn"
-var cmdRun string = "/usr/sbin/openvpn"
+var loadKey string = "default.ovpn"
+var cmdRunLinux string = "/usr/sbin/openvpn"
+var cmdRunWindows string = "C:\\Program Files\\OpenVPN\\bin\\openvpn.exe"
+var authFile string = "/opt/multivpn/keys/auth.txt"
 
 func initLogo() {
 	isEnabled := true
@@ -26,12 +29,18 @@ func initLogo() {
 
 func loadConfig() {
 	// load option in yaml file
+	//   --> load config/app.yaml    ; config binary & path
+	//   --> load config/keys.yaml   ; config keys & auth (openvpn)
 }
 
 func runVPN() {
 	var runKey string
 
-	runKey = fmt.Sprintf("%s --config %s", cmdRun, loadKey)
+	if runtime.GOOS == "windows" {
+		runKey = fmt.Sprintf("%s --config %s --auth-user-pass %s", cmdRunWindows, loadKey, authFile)
+	} else {
+		runKey = fmt.Sprintf("%s --config %s --auth-user-pass %s", cmdRunLinux, loadKey, authFile)
+	}
 	cmd := exec.Command("%s", runKey)
 	_, err := cmd.CombinedOutput()
 	if err != nil {
