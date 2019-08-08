@@ -29,6 +29,14 @@
   version = "v1.4.7"
 
 [[projects]]
+  digest = "1:5672cac2a0190dbb0658806e0f8e220ae4a4120451603504c22ef89a1126c109"
+  name = "github.com/go-ozzo/ozzo-validation"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "199b55b36bc1af151e6eea487cc92ffa5b460b81"
+  version = "v3.6.0"
+
+[[projects]]
   digest = "1:c0d19ab64b32ce9fe5cf4ddceba78d5bc9807f0016db6b1183599da3dcc24d10"
   name = "github.com/hashicorp/hcl"
   packages = [
@@ -64,18 +72,20 @@
   version = "v1.8.1"
 
 [[projects]]
-  digest = "1:e1e29f200afc15a8c28ebb971e537d5f38c036df0fc4cba32ddd309f6cc7c347"
+  digest = "1:7c084e0e780596dd2a7e20d25803909a9a43689c153de953520dfbc0b0e51166"
   name = "github.com/mattn/go-colorable"
   packages = ["."]
   pruneopts = "UT"
-  revision = "9cbef7c35391cca05f15f8181dc0b18bc9736dbb"
+  revision = "8029fb3788e5a4a9c00e415f586a6d033f5d38b3"
+  version = "v0.1.2"
 
 [[projects]]
-  digest = "1:abab8af2b6f41d6bcd8abf752b22aa0d4b40a9b0aa3f01186a695cf9a67d1fad"
+  digest = "1:9b90c7639a41697f3d4ad12d7d67dfacc9a7a4a6e0bbfae4fc72d0da57c28871"
   name = "github.com/mattn/go-isatty"
   packages = ["."]
   pruneopts = "UT"
-  revision = "56b76bdf51f7708750eac80fa38b952bb9f32639"
+  revision = "1311e847b0cb909da63b5fecfb5370aa66236465"
+  version = "v0.0.8"
 
 [[projects]]
   digest = "1:53bc4cd4914cd7cd52139990d5170d6dc99067ae31c56530621b18b35fc30318"
@@ -174,6 +184,7 @@
     "github.com/Sirupsen/logrus",
     "github.com/dimiro1/banner",
     "github.com/dimiro1/banner/autoload",
+    "github.com/go-ozzo/ozzo-validation",
     "github.com/mattn/go-colorable",
     "github.com/spf13/viper",
   ]
