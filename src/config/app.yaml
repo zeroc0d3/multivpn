@@ -1,0 +1,7 @@
+default:
+  name_file: "default.ovpn"
+  path_file: "/opt/multivpn/keys"
+
+abc:
+  file_name: "ABC.ovpn"
+  path_file: "/opt/multivpn/keys"

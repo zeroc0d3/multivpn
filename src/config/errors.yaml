@@ -1,0 +1,6 @@
+OPTION_ERROR:
+  message: "Can't execute your openvpn key."
+  developer_message: "Error openvpn key: {error}"
+
+NOT_FOUND:
+  message: "Can't find your openvpn key."
