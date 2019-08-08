@@ -61,6 +61,8 @@ func main() {
 	fmt.Printf("Running Key: %s \n", loadKey)
 	fmt.Printf("Log file saved to: %s \n\n", MULTIVPN_LOG)
 
+	fmt.Println("Type -h for help")
+	fmt.Println("----------------------------------------------------------------------------\n")
 	// create the logger
 	logger := logrus.New()
 	// logger.Formatter = &logrus.JSONFormatter{}   # --> format to JSON

@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 
+	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/spf13/viper"
 )
 
@@ -12,6 +13,26 @@ var ConfigYml appConfig
 type appConfig struct {
 	// the path to the error message file. Defaults to "config/errors.yaml"
 	ErrorFile string `mapstructure:"error_file"`
+
+	// Binary OpenVPN Linux
+	OpenvpnLinux string `mapstructure:"openvpn_linux"`
+	// Binary OpenVPN Windows
+	OpenvpnWindows string `mapstructure:"openvpn_windows"`
+	// Path Keys OpenVPN (*.ovpn)
+	PathKeys string `mapstructure:"path_keys"`
+
+	// Configuration Keys
+	FileName string `mapstructure:"file_name"`
+	PathFile string `mapstructure:"path_file"`
+	AuthFile string `mapstructure:"auth_file"`
+}
+
+func (config appConfig) Validate() error {
+	return validation.ValidateStruct(&config,
+		validation.Field(&config.OpenvpnLinux, validation.Required),
+		validation.Field(&config.OpenvpnWindows, validation.Required),
+		validation.Field(&config.PathKeys, validation.Required),
+	)
 }
 
 // LoadConfig loads configuration from the given list of paths and populates it into the Config variable.
