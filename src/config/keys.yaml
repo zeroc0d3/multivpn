@@ -1,0 +1,15 @@
+default:
+  name_file: "default.ovpn"
+  path_file: "/opt/multivpn/keys"
+  auth_file: "/opt/multivpn/auth.txt"
+
+t5:
+  file_name: "tunling5.ovpn"
+  path_file: "./keys/keys"
+  auth_file: "./keys/auth.txt"
+
+t9:
+  file_name: "tunling9.ovpn"
+  path_file: "./keys/keys"
+  auth_file: "./keys/auth.txt"
+  
