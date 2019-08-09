@@ -9,6 +9,7 @@
 # use [TAB] instead [SPACE]
 
 PATH_FOLDER=`pwd`
+DEFAULT_KEYS_VPN='/opt/multivpn/keys/default.ovpn'
 
 #---------------------------------
 # Installation 
@@ -21,12 +22,21 @@ vpn-setup:
 	@sudo mkdir -p /var/log/multivpn
 	@sudo touch /var/log/multivpn/multivpn.log
 	@sudo chmod -R 777 /var/log/multivpn
+	@sudo mkdir -p /opt/multivpn/config
+	@sudo mkdir -p /opt/multivpn/keys
+	@sudo chmod -R 777 /opt/multivpn
+
+vpn-develop:
+	@make vpn-setup
+	@cp ./keys/auth.txt /opt/multivpn/keys/auth.txt
+	@cp ./src/config/*.yaml /opt/multivpn/config
+	@sudo chmod -R 777 /opt/multivpn
 
 #---------------------------------
 # Running with 'default.ovpn' key
 #---------------------------------
 vpn-run:
-	@.${PATH_FOLDER}/bin/multivpn default
+	@.${PATH_FOLDER}/bin/multivpn ${DEFAULT_KEYS_VPN}
 
 #---------------------------------
 # Build binary for 'multivpn'
