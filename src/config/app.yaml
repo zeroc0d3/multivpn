@@ -1,3 +1,2 @@
 openvpn_linux: "/usr/sbin/openvpn"
 openvpn_windows: "C:\\Program Files\\OpenVPN\\bin\\openvpn.exe"
-path_keys: "/opt/multivpn/keys"
