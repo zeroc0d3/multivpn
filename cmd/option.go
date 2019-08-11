@@ -14,24 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package main
+package cmd
 
 import (
-	"bytes"
-
-	"github.com/dimiro1/banner"
-	_ "github.com/dimiro1/banner/autoload"
-	"github.com/mattn/go-colorable"
-	"github.com/zeroc0d3/multivpn/cmd"
+	"github.com/spf13/cobra"
 )
 
-func initLogo() {
-	isEnabled := true
-	isColorEnabled := true
-	banner.Init(colorable.NewColorableStdout(), isEnabled, isColorEnabled, bytes.NewBufferString("MultiVPN CLI {{ .AnsiColor.Green }}(Running){{ .AnsiColor.Default }} ...\n\n"))
+// optionCmd represents the multivpn command
+var optionCmd = &cobra.Command{
+	Use:   "option",
+	Short: "Running multivpn option key",
+	Run: func(cmd *cobra.Command, args []string) {
+		multivpnExecute()
+	},
 }
 
-func main() {
-	initLogo()
-	cmd.Execute()
+func init() {
+	rootCmd.AddCommand(optionCmd)
 }

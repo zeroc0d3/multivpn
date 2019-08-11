@@ -23,25 +23,9 @@ import (
 	"runtime"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/spf13/cobra"
 	"github.com/zeroc0d3/multivpn/src/app"
 	"github.com/zeroc0d3/multivpn/src/errors"
 )
-
-// multivpnCmd represents the multivpn command
-var multivpnCmd = &cobra.Command{
-	Use:   "multivpn",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("multivpn called")
-	},
-}
 
 const MULTIVPN_LOG = "/var/log/multivpn/multivpn.log"
 
@@ -142,25 +126,13 @@ func runVPN() {
 	}
 }
 
-func init() {
-	rootCmd.AddCommand(multivpnCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// multivpnCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// multivpnCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
+func multivpnExecute() {
 	// load yaml file
 	loadConfig()
-	fmt.Printf(" OpenVPN Key : %s \n", loadKey)
-	fmt.Printf(" Auth File   : %s \n", authFile)
-	fmt.Printf(" Running     : %s \n", runMultivpn)
-	fmt.Printf(" Log File    : %s \n", MULTIVPN_LOG)
+	fmt.Printf("OpenVPN Key : %s \n", loadKey)
+	fmt.Printf("Auth File   : %s \n", authFile)
+	fmt.Printf("Running     : %s \n", runMultivpn)
+	fmt.Printf("Log File    : %s \n", MULTIVPN_LOG)
 	fmt.Println("----------------------------------------------------------------------------")
 	// running
 	// runVPN()

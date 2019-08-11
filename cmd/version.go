@@ -13,25 +13,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-package main
+package cmd
 
 import (
-	"bytes"
+	"fmt"
 
-	"github.com/dimiro1/banner"
-	_ "github.com/dimiro1/banner/autoload"
-	"github.com/mattn/go-colorable"
-	"github.com/zeroc0d3/multivpn/cmd"
+	"github.com/spf13/cobra"
+	"github.com/zeroc0d3/multivpn/src/app"
 )
 
-func initLogo() {
-	isEnabled := true
-	isColorEnabled := true
-	banner.Init(colorable.NewColorableStdout(), isEnabled, isColorEnabled, bytes.NewBufferString("MultiVPN CLI {{ .AnsiColor.Green }}(Running){{ .AnsiColor.Default }} ...\n\n"))
+// versionCmd represents the version command
+var versionCmd = &cobra.Command{
+	Use:   "version",
+	Short: "Show multivpn version",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Printf("MultiVPN version %s \n", app.Version)
+	},
 }
 
-func main() {
-	initLogo()
-	cmd.Execute()
+func init() {
+	rootCmd.AddCommand(versionCmd)
 }
