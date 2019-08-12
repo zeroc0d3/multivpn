@@ -17,21 +17,10 @@ limitations under the License.
 package main
 
 import (
-	"bytes"
-
-	"github.com/dimiro1/banner"
 	_ "github.com/dimiro1/banner/autoload"
-	"github.com/mattn/go-colorable"
 	"github.com/zeroc0d3/multivpn/cmd"
 )
 
-func initLogo() {
-	isEnabled := true
-	isColorEnabled := true
-	banner.Init(colorable.NewColorableStdout(), isEnabled, isColorEnabled, bytes.NewBufferString("MultiVPN CLI {{ .AnsiColor.Green }}(Running){{ .AnsiColor.Default }} ...\n\n"))
-}
-
 func main() {
-	initLogo()
 	cmd.Execute()
 }

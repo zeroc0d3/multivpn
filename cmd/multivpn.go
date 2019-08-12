@@ -17,12 +17,15 @@ limitations under the License.
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"os/exec"
 	"runtime"
 
 	"github.com/Sirupsen/logrus"
+	"github.com/dimiro1/banner"
+	"github.com/mattn/go-colorable"
 	"github.com/zeroc0d3/multivpn/src/app"
 	"github.com/zeroc0d3/multivpn/src/errors"
 )
@@ -43,6 +46,12 @@ var runMultivpn string
 var str_name_file string
 var str_path_file string
 var str_auth_file string
+
+func initLogo() {
+	isEnabled := true
+	isColorEnabled := true
+	banner.Init(colorable.NewColorableStdout(), isEnabled, isColorEnabled, bytes.NewBufferString("MultiVPN CLI {{ .AnsiColor.Green }}(Running){{ .AnsiColor.Default }} ...\n\n"))
+}
 
 func loadConfig() {
 	// load configuration in environment variables:
@@ -133,9 +142,11 @@ func runVPN() {
 }
 
 func multivpnExecute() {
+	initLogo()
 	// load yaml file
 	loadConfig()
 	if loadKey != "" && authFile != "" {
+		fmt.Println("----------------------------------------------------------------------------")
 		fmt.Printf("OpenVPN Key : %s \n", loadKey)
 		fmt.Printf("Auth File   : %s \n", authFile)
 		fmt.Printf("Running     : %s \n", runMultivpn)

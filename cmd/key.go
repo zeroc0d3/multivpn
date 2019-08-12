@@ -20,9 +20,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// optionCmd represents the multivpn command
-var optionCmd = &cobra.Command{
-	Use:   "option",
+// keyCmd represents the multivpn command
+var keyCmd = &cobra.Command{
+	Use:   "key",
 	Short: "Running MultiVPN with specific key",
 	Run: func(cmd *cobra.Command, args []string) {
 		multivpnExecute()
@@ -30,5 +30,5 @@ var optionCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(optionCmd)
+	rootCmd.AddCommand(keyCmd)
 }
