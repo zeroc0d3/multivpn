@@ -25,7 +25,7 @@ import (
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Show multivpn version",
+	Short: "Show MultiVPN version number",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("MultiVPN version %s \n", app.Version)
 	},

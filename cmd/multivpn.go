@@ -82,27 +82,33 @@ func loadConfig() {
 		OPENVPN_BIN_WINDOWS = app.ConfigYml.OpenvpnWindows
 	}
 
-	// if arguments[1] doesn't exist then use "default" key
-	optArgs := os.Args[1]
-	// fmt.Println(optArgs)
+	if len(os.Args[2:]) < 1 {
+		fmt.Println("Please provide at least one argument, to see available argument just type -h argument")
+		os.Exit(1)
+	}
 
-	if optArgs != "" {
-		// load keys openvpn
-		//   --> load config/keys.yaml   ; config keys & auth (openvpn)
-		if err := app.LoadKeysYml(MULTIVPN_PATH_CONFIG); err != nil {
-			panic(fmt.Errorf("Invalid application keys: %s", err))
-		}
+	// load keys openvpn
+	//   --> load config/keys.yaml   ; config keys & auth (openvpn)
+	if err := app.LoadKeysYml(MULTIVPN_PATH_CONFIG); err != nil {
+		panic(fmt.Errorf("Invalid application keys: %s", err))
+	}
 
-		str_name_file = optArgs + ".name_file"
-		str_path_file = optArgs + ".path_file"
-		str_auth_file = optArgs + ".auth_file"
+	str_name_file = os.Args[2] + ".name_file"
+	str_path_file = os.Args[2] + ".path_file"
+	str_auth_file = os.Args[2] + ".auth_file"
 
+	if (app.KeysYml.PathFile != "") && (app.KeysYml.FileName != "") {
 		loadKey = app.KeysYml.PathFile + app.KeysYml.FileName
+	} else {
+		//loadKey = MULTIVPN_PATH_KEYS + MULTIVPN_DEFAULT_KEYS
+		fmt.Println(">> Can't use your openvpn (*.ovpn) key ...")
+	}
+
+	if app.KeysYml.AuthFile != "" {
 		authFile = app.KeysYml.AuthFile
 	} else {
-		// default
-		loadKey = MULTIVPN_PATH_KEYS + MULTIVPN_DEFAULT_KEYS
-		authFile = MULTIVPN_PATH_KEYS + MULTIVPN_DEFAULT_AUTH
+		//authFile = MULTIVPN_PATH_KEYS + MULTIVPN_DEFAULT_AUTH
+		fmt.Println(">> Can't use your auth configuration file ...\n")
 	}
 
 	if runtime.GOOS == "windows" {
@@ -129,11 +135,13 @@ func runVPN() {
 func multivpnExecute() {
 	// load yaml file
 	loadConfig()
-	fmt.Printf("OpenVPN Key : %s \n", loadKey)
-	fmt.Printf("Auth File   : %s \n", authFile)
-	fmt.Printf("Running     : %s \n", runMultivpn)
-	fmt.Printf("Log File    : %s \n", MULTIVPN_LOG)
-	fmt.Println("----------------------------------------------------------------------------")
+	if loadKey != "" && authFile != "" {
+		fmt.Printf("OpenVPN Key : %s \n", loadKey)
+		fmt.Printf("Auth File   : %s \n", authFile)
+		fmt.Printf("Running     : %s \n", runMultivpn)
+		fmt.Printf("Log File    : %s \n", MULTIVPN_LOG)
+		fmt.Println("----------------------------------------------------------------------------")
+	}
 	// running
-	// runVPN()
+	runVPN()
 }

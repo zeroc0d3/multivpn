@@ -23,7 +23,7 @@ import (
 // optionCmd represents the multivpn command
 var optionCmd = &cobra.Command{
 	Use:   "option",
-	Short: "Running multivpn option key",
+	Short: "Running MultiVPN with specific key",
 	Run: func(cmd *cobra.Command, args []string) {
 		multivpnExecute()
 	},
