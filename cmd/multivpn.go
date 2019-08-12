@@ -40,12 +40,10 @@ var MULTIVPN_DEFAULT_AUTH string = "auth.txt"
 var OPENVPN_BIN_LINUX string
 var OPENVPN_BIN_WINDOWS string
 
+var environment string
 var loadKey string
 var authFile string
-var runMultivpn string
-var str_name_file string
-var str_path_file string
-var str_auth_file string
+var err error
 
 func initLogo() {
 	isEnabled := true
@@ -55,8 +53,8 @@ func initLogo() {
 
 func loadConfig() {
 	// load configuration in environment variables:
-	env := os.Getenv("ENV_MULTIVPN")
-	if "development" == env {
+	environment := os.Getenv("ENV_MULTIVPN")
+	if "development" == environment {
 		MULTIVPN_PATH_CONFIG = "./src/config/"
 		MULTIVPN_PATH_KEYS = "./keys/"
 	}
@@ -102,54 +100,59 @@ func loadConfig() {
 		panic(fmt.Errorf("Invalid application keys: %s", err))
 	}
 
-	str_name_file = os.Args[2] + ".name_file"
-	str_path_file = os.Args[2] + ".path_file"
-	str_auth_file = os.Args[2] + ".auth_file"
-
 	if (app.KeysYml.PathFile != "") && (app.KeysYml.FileName != "") {
 		loadKey = app.KeysYml.PathFile + app.KeysYml.FileName
 	} else {
-		//loadKey = MULTIVPN_PATH_KEYS + MULTIVPN_DEFAULT_KEYS
+		// loadKey = MULTIVPN_PATH_KEYS + MULTIVPN_DEFAULT_KEYS
 		fmt.Println(">> Can't use your openvpn (*.ovpn) key ...")
 	}
 
 	if app.KeysYml.AuthFile != "" {
 		authFile = app.KeysYml.AuthFile
 	} else {
-		//authFile = MULTIVPN_PATH_KEYS + MULTIVPN_DEFAULT_AUTH
+		// authFile = MULTIVPN_PATH_KEYS + MULTIVPN_DEFAULT_AUTH
 		fmt.Println(">> Can't use your auth configuration file ...\n")
-	}
-
-	if runtime.GOOS == "windows" {
-		runMultivpn = fmt.Sprintf("%s --config %s --auth-user-pass %s", OPENVPN_BIN_WINDOWS, loadKey, authFile)
-	} else {
-		runMultivpn = fmt.Sprintf("%s --config %s --auth-user-pass %s", OPENVPN_BIN_LINUX, loadKey, authFile)
 	}
 }
 
 func runVPN() {
-	//runMultivpn := []rune(runMultivpn)
-	//fmt.Println(string(runMultivpn[0:6]))
-	_, err := exec.Command(runMultivpn).Output()
-	if err != nil {
-		fmt.Println(err)
+	var runBinary string
+	if runtime.GOOS == "windows" {
+		// runMultivpn = fmt.Sprintf("%s --config %s --auth-user-pass %s", OPENVPN_BIN_WINDOWS, loadKey, authFile)
+		runBinary = OPENVPN_BIN_WINDOWS
+	} else {
+		// runMultivpn = fmt.Sprintf("%s --config %s --auth-user-pass %s", OPENVPN_BIN_LINUX, loadKey, authFile)
+		runBinary = OPENVPN_BIN_LINUX
+	}
+	args := []string{"--config", loadKey, "--auth-user-pass", authFile}
+	if err := exec.Command(runBinary, args...).Run(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
 		fmt.Printf("# Running VPN Access...                    ")
 		fmt.Printf("[ TERMINATED ]\n")
+		os.Exit(1)
 	} else {
 		fmt.Printf("# Running VPN Access...                    ")
 		fmt.Printf("[   DONE   ]\n")
+		os.Exit(0)
 	}
 }
 
 func multivpnExecute() {
+	var env string = "development"
 	initLogo()
 	// load yaml file
 	loadConfig()
+
+	environment := os.Getenv("ENV_MULTIVPN")
+	// fmt.Printf("env: %s", os.Getenv("ENV_MULTIVPN"))
+	if "development" != environment {
+		env = "production"
+	}
 	if loadKey != "" && authFile != "" {
 		fmt.Println("----------------------------------------------------------------------------")
+		fmt.Printf("Environment : %s \n", env)
 		fmt.Printf("OpenVPN Key : %s \n", loadKey)
 		fmt.Printf("Auth File   : %s \n", authFile)
-		fmt.Printf("Running     : %s \n", runMultivpn)
 		fmt.Printf("Log File    : %s \n", MULTIVPN_LOG)
 		fmt.Println("----------------------------------------------------------------------------")
 	}

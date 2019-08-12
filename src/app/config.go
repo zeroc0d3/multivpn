@@ -28,6 +28,10 @@ import (
 var ConfigYml appConfig
 var KeysYml appKeys
 
+var str_name_file string
+var str_path_file string
+var str_auth_file string
+
 type appConfig struct {
 	// the path to the error message file. Defaults to "config/errors.yaml"
 	ErrorFile string `mapstructure:"error_file"`
@@ -87,6 +91,7 @@ func LoadKeysYml(configPaths ...string) error {
 	v := viper.New()
 	v.SetConfigName("keys")
 	v.SetConfigType("yaml")
+	v.SetDefault("error_file", "./src/config/errors.yaml")
 
 	for _, path := range configPaths {
 		v.AddConfigPath(path)
@@ -100,11 +105,15 @@ func LoadKeysYml(configPaths ...string) error {
 	}
 
 	// if arguments option is nil (not use option -> set to "default")
-	var mapKeys = v.Get(os.Args[1])
-	if mapKeys == "" {
-		mapKeys = v.Get("default")
-	}
-	// fmt.Println(mapKeys)
+	// var mapKeys = v.Get(os.Args[2])
+	// if mapKeys == "" {
+	// 	mapKeys = v.Get("default")
+	// }
+	// fmt.Printf("Results: %s \n", mapKeys)
+
+	str_name_file = os.Args[2] + ".name_file"
+	str_path_file = os.Args[2] + ".path_file"
+	str_auth_file = os.Args[2] + ".auth_file"
 
 	return KeysYml.ValidateKeys()
 }
