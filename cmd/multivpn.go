@@ -30,7 +30,7 @@ import (
 	"github.com/zeroc0d3/multivpn/src/errors"
 )
 
-const MULTIVPN_LOG = "/var/log/multivpn/multivpn.log"
+const MULTIVPN_LOG = "/opt/multivpn/multivpn.log"
 
 var MULTIVPN_PATH_CONFIG string = "/opt/multivpn/config/"
 var MULTIVPN_PATH_KEYS string = "/opt/multivpn/keys/"
@@ -48,7 +48,7 @@ var err error
 func initLogo() {
 	isEnabled := true
 	isColorEnabled := true
-	banner.Init(colorable.NewColorableStdout(), isEnabled, isColorEnabled, bytes.NewBufferString("MultiVPN CLI {{ .AnsiColor.Green }}(Running){{ .AnsiColor.Default }} ...\n\n"))
+	banner.Init(colorable.NewColorableStdout(), isEnabled, isColorEnabled, bytes.NewBufferString("MultiVPN CLI {{ .AnsiColor.Green }}(Running){{ .AnsiColor.Default }} ...\n"))
 }
 
 func loadConfig() {
@@ -62,11 +62,13 @@ func loadConfig() {
 	// load configuration yaml file
 	//   --> load config/app.yaml    ; config binary & path
 	if err := app.LoadConfigYml(MULTIVPN_PATH_CONFIG); err != nil {
-		panic(fmt.Errorf("Invalid application configuration: %s", err))
+		fmt.Printf("Invalid application configuration: %s \n", err)
+		os.Exit(1)
 	}
 	// load error messages
 	if err := errors.LoadMessages(app.ConfigYml.ErrorFile); err != nil {
-		panic(fmt.Errorf("Failed to read the error message file: %s", err))
+		fmt.Printf("Failed to read the error message file: %s \n", err)
+		os.Exit(1)
 	}
 
 	// create the logger
@@ -97,42 +99,46 @@ func loadConfig() {
 	// load keys openvpn
 	//   --> load config/keys.yaml   ; config keys & auth (openvpn)
 	if err := app.LoadKeysYml(MULTIVPN_PATH_CONFIG); err != nil {
-		panic(fmt.Errorf("Invalid application keys: %s", err))
+		fmt.Printf("Invalid application keys: %s \n", err)
+		os.Exit(1)
 	}
 
 	if (app.KeysYml.PathFile != "") && (app.KeysYml.FileName != "") {
 		loadKey = app.KeysYml.PathFile + app.KeysYml.FileName
 	} else {
-		// loadKey = MULTIVPN_PATH_KEYS + MULTIVPN_DEFAULT_KEYS
+		//--> "default"
+		//loadKey = MULTIVPN_PATH_KEYS + MULTIVPN_DEFAULT_KEYS
 		fmt.Println(">> Can't use your openvpn (*.ovpn) key ...")
 	}
 
 	if app.KeysYml.AuthFile != "" {
 		authFile = app.KeysYml.AuthFile
 	} else {
-		// authFile = MULTIVPN_PATH_KEYS + MULTIVPN_DEFAULT_AUTH
-		fmt.Println(">> Can't use your auth configuration file ...\n")
+		//--> "default"
+		//authFile = MULTIVPN_PATH_KEYS + MULTIVPN_DEFAULT_AUTH
+		fmt.Println(">> Can't use your auth configuration file ...")
+		fmt.Println("")
 	}
 }
 
 func runVPN() {
 	var runBinary string
 	if runtime.GOOS == "windows" {
-		// runMultivpn = fmt.Sprintf("%s --config %s --auth-user-pass %s", OPENVPN_BIN_WINDOWS, loadKey, authFile)
+		// runBinary = fmt.Sprintf("%s --config %s --auth-user-pass %s", OPENVPN_BIN_WINDOWS, loadKey, authFile)
 		runBinary = OPENVPN_BIN_WINDOWS
 	} else {
-		// runMultivpn = fmt.Sprintf("%s --config %s --auth-user-pass %s", OPENVPN_BIN_LINUX, loadKey, authFile)
+		// runBinary = fmt.Sprintf("%s --config %s --auth-user-pass %s", OPENVPN_BIN_LINUX, loadKey, authFile)
 		runBinary = OPENVPN_BIN_LINUX
 	}
 	args := []string{"--config", loadKey, "--auth-user-pass", authFile}
 	if err := exec.Command(runBinary, args...).Run(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		fmt.Printf("# Running VPN Access...                    ")
-		fmt.Printf("[ TERMINATED ]\n")
+		//fmt.Fprintln(os.Stderr, err)
+		fmt.Print("# Running VPN Access...                    ")
+		fmt.Print("[ TERMINATED ]\n")
 		os.Exit(1)
 	} else {
-		fmt.Printf("# Running VPN Access...                    ")
-		fmt.Printf("[   DONE   ]\n")
+		fmt.Print("# Running VPN Access...                    ")
+		fmt.Print("[   DONE   ]\n")
 		os.Exit(0)
 	}
 }
