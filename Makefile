@@ -33,6 +33,7 @@ setup:
 	@sudo mkdir -p /opt/multivpn/config
 	@sudo mkdir -p /opt/multivpn/keys
 	@sudo chmod -R 777 /opt/multivpn
+	@go get github.com/laher/goxc
 
 develop:
 	@make setup
